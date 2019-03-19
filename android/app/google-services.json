@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "290826560562",
+    "firebase_url": "https://calenderdemo123.firebaseio.com",
+    "project_id": "calenderdemo123",
+    "storage_bucket": "calenderdemo123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290826560562:android:e913f6faef628413",
+        "android_client_info": {
+          "package_name": "com.googlecalenderdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290826560562-jhg5c3blkn9u9b64fg3up9ocmi6o9ghq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.googlecalenderdemo",
+            "certificate_hash": "9bac95f9e8db5f2c1027c3f3cfa3f37da00c7f8c"
+          }
+        },
+        {
+          "client_id": "290826560562-bbi2b99p8r6fuu4nrpdl0rnjks2jf0v7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.googlecalenderdemo",
+            "certificate_hash": "2a108acebdd0142136e1e5617f8507fdf1034433"
+          }
+        },
+        {
+          "client_id": "290826560562-3sqo093d52llo4jhkqcfokj6nc7g77o6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPK56c2crjc5VVEhr38pvogf--kvZdscY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290826560562-3sqo093d52llo4jhkqcfokj6nc7g77o6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "290826560562-tdgvdtt0i1bfhp71egdvm7umalfb6mbo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.busywizzy.GoogleCalender"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

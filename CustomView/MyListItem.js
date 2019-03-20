@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     },
     description: {
         padding: 10,
-        fontSize: 25,
-        height:40,
+        fontSize: 20,
+        height:45,
         fontWeight:'bold',
         textAlign:'left'
     },

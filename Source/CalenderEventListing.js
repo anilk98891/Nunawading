@@ -4,6 +4,8 @@ import CustomRow from '../CustomView/MyListItem'
 import YourRestApi from '../ApiClass/RestClass'
 import ConstantClass from '../Constants/ConstantClass'
 import moment from 'moment';
+import RNCalendarEvents from 'react-native-calendar-events'
+import RNLocalNotifications from 'react-native-local-notifications';
 
 export default class CalenderEventListing extends React.PureComponent {
     constructor() {
@@ -22,7 +24,6 @@ export default class CalenderEventListing extends React.PureComponent {
     }
 
     onPress = () => {
-        console.log('tapp')
         this.setState({ isHidden: true })
     }
 
@@ -32,11 +33,39 @@ export default class CalenderEventListing extends React.PureComponent {
     }
 
     componentWillMount() {
+        // iOS
+        RNCalendarEvents.authorizationStatus()
+            .then(status => {
+                // if the status was previous accepted, set the authorized status to state
+                this.setState({ cal_auth: status })
+                if (status === 'undetermined') {
+                    // if we made it this far, we need to ask the user for access 
+                    RNCalendarEvents.authorizeEventStore()
+                        .then((out) => {
+                            if (out == 'authorized') {
+                                // set the new status to the auth state
+                                this.setState({ cal_auth: out })
+                                
+                            }
+                        })
+                }
+            })
+            .catch(error => console.warn('Auth Error: ', error));
+
+        // Android
+        RNCalendarEvents.authorizeEventStore()
+            .then((out) => {
+                if (out == 'authorized') {
+                    // set the new status to the auth state
+                    this.setState({ cal_auth: out })
+                }
+            })
+            .catch(error => console.warn('Auth Error: ', error));
+
         this.retrieveItem()
     }
 
     responseHandle(response) {
-        console.log(response);
         this.setState({ isLoading: false, })
         if (response.responsecode == false) {
             Alert.alert(response.MessageWhatHappen)
@@ -44,6 +73,74 @@ export default class CalenderEventListing extends React.PureComponent {
             this.setState({
                 events: response.items
             });
+
+            function removeEvent(value) {
+                let fromTime = moment(value.start.dateTime).add(2, 'hours').format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+                let currentDate = moment(value.start.dateTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+                RNCalendarEvents.fetchAllEvents(currentDate, fromTime).then(events => {
+                    for (let event of events) {
+                        if (event.notes == 'church') {
+                            RNCalendarEvents.removeEvent(event.id)
+                            console.log('delete')
+                        }
+                    }
+                });
+            }
+
+            for (i = 0; i < this.state.events.length; i++) {
+                removeEvent(this.state.events[i])
+                fetchAndDelete(this.state.events[i],i)
+            }
+
+            function fetchAndDelete(i,j) {
+                var promise1 = new Promise(function (resolve, reject) {
+                    setTimeout(function () {
+                        resolve(i);
+                    }, 500 * j);
+                });
+
+                promise1.then(function (value) {
+                        createEvents(value)
+                        createLocalNotification(value)
+                    })
+            }
+
+            function createLocalNotification(value) {
+                let currentDate = moment(value.start.dateTime).format("YYYY-MM-DD HH:mm")
+
+                //RNLocalNotifications.setAndroidIcons(largeIconName, largeIconType, smallIconName, smallIconType);
+                RNLocalNotifications.setAndroidIcons("1.png", "mipmap", "notification_small", "drawable"); //this are the default values, this function is optional
+        
+                //RNLocalNotifications.createNotification(id, text, datetime, sound[, hiddendata]);
+                RNLocalNotifications.createNotification(1, value.summary, currentDate, 'default');
+        
+                //RNLocalNotifications.updateNotification(id, text, datetime, sound[, hiddendata]);
+                // RNLocalNotifications.updateNotification(1, 'Some modifications to text', '2017-01-02 12:35', 'silence');
+        
+                //RNLocalNotifications.deleteNotification(id);
+                // RNLocalNotifications.deleteNotification(1);
+            }
+        }
+
+        function createEvents(i){
+            let currentDate = moment(i.start.dateTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            console.log(currentDate + i.summary)
+            RNCalendarEvents.saveEvent(i.summary, {
+                location: 'self',
+                notes: 'church',
+                description: i.summary,
+                startDate: currentDate,
+                endDate: currentDate,
+                calendar: ['Church'],
+                alarm: [{
+                    date: currentDate
+                }],
+            })
+                .then(id => {
+                    // we can get the event ID here if we need it
+                    console.log('created')
+                    console.log(id)
+                })
         }
     }
 
@@ -54,7 +151,6 @@ export default class CalenderEventListing extends React.PureComponent {
             if (value !== null) {
                 // We have data!!
                 ConstantClass.GoogleKeys.GoogleAuthToken = value
-                console.log(value)
                 const api = new YourRestApi();
                 api.headers.Authorization = 'OAuth ' + value
                 api.getEventsData()

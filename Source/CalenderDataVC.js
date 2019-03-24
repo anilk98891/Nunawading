@@ -1,23 +1,26 @@
 import React from 'react';
-import { StyleSheet, ImageBackground, View, AsyncStorage, TextInput, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, ImageBackground, View, AsyncStorage, Button, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import constanctClass from '../Constants/ConstantClass'
+import RNExitApp from 'react-native-exit-app';
 
 export default class CalenderData extends React.Component {
+  
     static navigationOptions = ({ navigation }) => {
         return {
             headerTitle: 'Calendar List',
             headerRight: (
-                <TouchableOpacity style={styles.rightBarBtn}>
+                <TouchableOpacity onPress={()=>{ RNExitApp.exitApp() }} style={styles.rightBarBtn}>
                     <Image source={require('../Resources/error.png')} style={styles.rightBarImage} />
                 </TouchableOpacity>
             ),
         };
     };
+    
 
-    _onSIGNINPressed() {
-        this.props.navigation.navigate('CalenderEvent')
-    }
+  _onSIGNINPressed() {
+    this.props.navigation.navigate('CalenderEvent')
+  }
 
     _onTaskPressed = async() => {
             try {
@@ -78,7 +81,7 @@ export default class CalenderData extends React.Component {
             // forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
             // accountName: '', // [Android] specifies an account name on the device that should be used
             // androidClientId: '290826560562-3sqo093d52llo4jhkqcfokj6nc7g77o6.apps.googleusercontent.com',
-            // iosClientId: '290826560562-tdgvdtt0i1bfhp71egdvm7umalfb6mbo.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+            iosClientId: '290826560562-tdgvdtt0i1bfhp71egdvm7umalfb6mbo.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
           });
     }
 

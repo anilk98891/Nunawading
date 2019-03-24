@@ -49,4 +49,15 @@
                           annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
+//add this
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0]; //Allways reset number of notifications shown at the icon
+  for (UILocalNotification * notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) { //Also remove all shown notifications
+    if ([notification.fireDate compare:[NSDate date]] == NSOrderedAscending) {
+      [[UIApplication sharedApplication] cancelLocalNotification:notification];
+    }
+  }
+}
+
 @end

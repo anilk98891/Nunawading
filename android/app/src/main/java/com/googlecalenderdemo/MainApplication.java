@@ -3,6 +3,10 @@ package com.googlecalenderdemo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.calendarevents.CalendarEventsPackage;
+import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
+import com.vonovak.AddCalendarEventPackage;
+import com.github.wumke.RNExitApp.RNExitAppPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +29,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new CalendarEventsPackage(),
+            new RNLocalNotificationsPackage(),
+            new AddCalendarEventPackage(),
+            new RNExitAppPackage(),
             new RNGoogleSigninPackage(),
             new RNGestureHandlerPackage()
       );

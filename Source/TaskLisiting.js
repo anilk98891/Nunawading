@@ -4,6 +4,8 @@ import CustomRow from '../CustomView/MyListItem'
 import YourRestApi from '../ApiClass/RestClass'
 import ConstantClass from '../Constants/ConstantClass';
 import moment from 'moment';
+import RNCalendarEvents from 'react-native-calendar-events'
+import RNLocalNotifications from 'react-native-local-notifications';
 
 export default class TaskLisiting extends React.PureComponent {
     constructor() {
@@ -29,11 +31,8 @@ export default class TaskLisiting extends React.PureComponent {
     }
 
     onPressItem = (id, index) => {
-        console.log(index)
-        console.log(id)
         this.state.selectedSection = id
         this.state.selectedIndex = index
-        console.log(this.state.selectedSection.data[this.state.selectedIndex].title)
         this.setState({ alertShow: false })
     }
 
@@ -48,13 +47,90 @@ export default class TaskLisiting extends React.PureComponent {
             Alert.alert(response.MessageWhatHappen)
         } else {
             const tempArr = this.state.tasks
-            tempArr[index].data = response.items == undefined ? [{'title': 'No task found'}] : response.items
+            tempArr[index].data = response.items == undefined ? [{ 'title': 'No task found' }] : response.items
             this.state.count += 1
             this.state.tasks = tempArr
         }
-        if(this.state.count == this.state.tasks.length){
-        this.setState({ isHidden: false })
+        if (this.state.count == this.state.tasks.length) {
+            this.setState({ isHidden: false })
+            this.dataSetup()
         }
+    }
+
+    //get and set
+    dataSetup() {
+
+        function removeEvent(i) {
+            let fromTime = moment(i.due == undefined ? i.updated : i.due).add(2, 'hours').format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            let currentDate = moment(i.due == undefined ? i.updated : i.due).format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            RNCalendarEvents.fetchAllEvents(currentDate, fromTime).then(events => {
+                for (let event of events) {
+                    if (event.notes == 'church task') {
+                        RNCalendarEvents.removeEvent(event.id)
+                        console.log('delete')
+                    }
+                }
+            });
+        }
+
+        for (i = 0; i < this.state.tasks.length; i++) {
+            console.log('count task : ' + i)
+            const subtask = this.state.tasks[i].data
+            for (j = 0; j < subtask.length; j++) {
+                removeEvent(subtask[j])
+                fetchAndDelete(subtask[j], j)
+            }
+        }
+
+        function fetchAndDelete(i, j) {
+            var promise1 = new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    resolve(i);
+                }, 500 * j);
+            });
+
+            promise1.then(function (value) {
+                createEvents(value)
+                createLocalNotification(value)
+            })
+        }
+
+        function createEvents(i) {
+            let currentDate = moment(i.due == undefined ? i.updated : i.due).format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            RNCalendarEvents.saveEvent(i.title, {
+                location: 'self',
+                notes: 'church task',
+                description: i.notes,
+                startDate: currentDate,
+                endDate: currentDate,
+                calendar: ['Church'],
+                alarm: [{
+                    date: currentDate
+                }],
+            })
+                .then(id => {
+                    // we can get the event ID here if we need it
+                    console.log('created')
+                    console.log(id)
+                })
+        }
+
+        function createLocalNotification(value) {
+            let currentDate = moment(value.start.dateTime).format("YYYY-MM-DD HH:mm")
+
+            //RNLocalNotifications.setAndroidIcons(largeIconName, largeIconType, smallIconName, smallIconType);
+            RNLocalNotifications.setAndroidIcons("1.png", "mipmap", "notification_small", "drawable"); //this are the default values, this function is optional
+    
+            //RNLocalNotifications.createNotification(id, text, datetime, sound[, hiddendata]);
+            RNLocalNotifications.createNotification(1, value.summary, currentDate, 'default');
+    
+            //RNLocalNotifications.updateNotification(id, text, datetime, sound[, hiddendata]);
+            // RNLocalNotifications.updateNotification(1, 'Some modifications to text', '2017-01-02 12:35', 'silence');
+    
+            //RNLocalNotifications.deleteNotification(id);
+            // RNLocalNotifications.deleteNotification(1);
+        }
+
     }
 
     responseHandle(response) {
@@ -66,6 +142,7 @@ export default class TaskLisiting extends React.PureComponent {
                 tasks: response.items
             });
         }
+
         //retrieve subtask
         this.setState({ isLoading: true, })
         const api = new YourRestApi();
@@ -76,6 +153,7 @@ export default class TaskLisiting extends React.PureComponent {
                 .then(response => this.responsehandleSubTask(response, i))   // Successfully 
                 .catch(err => alert(err.message));  // Catch any error
         }
+
     }
 
     retrieveItem = async () => {
@@ -106,12 +184,10 @@ export default class TaskLisiting extends React.PureComponent {
         />
     );
 
-    _renderItem = ({ item, index, section }) => (<Text>{`${item.title}(${section.title})`}</Text>)
-
     _renderSectionHeader = ({ section }) => {
         return (
             <View style={{ backgroundColor: ConstantClass.COLOR.ORANGE, height: 50, left: 10, width: "94%" }} >
-                <Text style={{ fontSize: 16,fontWeight: 'bold',textAlign: 'left', height: '100%',color: 'white', justifyContent: 'center', top: 20 }}> {section.title} </Text>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left', height: '100%', color: 'white', justifyContent: 'center', top: 20 }}> {section.title} </Text>
             </View>
         )
     }

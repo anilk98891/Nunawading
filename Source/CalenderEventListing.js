@@ -66,6 +66,7 @@ export default class CalenderEventListing extends React.PureComponent {
     }
 
     responseHandle(response) {
+        console.log(response)
         this.setState({ isLoading: false, })
         if (response.responsecode == false) {
             Alert.alert(response.MessageWhatHappen)
@@ -152,7 +153,7 @@ export default class CalenderEventListing extends React.PureComponent {
                 // We have data!!
                 ConstantClass.GoogleKeys.GoogleAuthToken = value
                 const api = new YourRestApi();
-                api.headers.Authorization = 'OAuth ' + value
+                // api.headers.Authorization = ''
                 api.getEventsData()
                     .then(response => this.responseHandle(response))   // Successfully logged in
                     .catch(err => alert(err.message));  // Catch any error
@@ -170,6 +171,7 @@ export default class CalenderEventListing extends React.PureComponent {
             summary={item.summary}
             onPress={this.onPressItem}
             index={index}
+            color= {ConstantClass.COLOR.LIGHTBLUE}
         />
     );
 

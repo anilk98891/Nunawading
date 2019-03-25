@@ -17,6 +17,8 @@ export default class YourRestApi extends RestClient {
   }
 
   getEventsData() {
+    console.log(this.headers)
+
     // If the request is successful, you can return the expected object
     // instead of the whole response.
     return this.GET('calendar/v3/calendars/busywizzy1@gmail.com/events?key='+ constants.GoogleKeys.GoogleAPIKeys)
@@ -34,6 +36,7 @@ export default class YourRestApi extends RestClient {
   }
 
   getSubTasksData() {
+    console.log(this.headers)
     return this.GET('tasks/v1/lists/' + this.state.taskId + '/tasks?key='+ constants.GoogleKeys.GoogleAPIKeys)
       .then(response => response);
   }
@@ -41,6 +44,11 @@ export default class YourRestApi extends RestClient {
   getDriveData() {
     console.log(this.headers)
     return this.GET('drive/v2/files')
+    .then(response => response);
+  }
+
+  getAuthOfflineToken(grant_type, client_id,client_secret,refresh_token) {
+    return this.POST('oauth2/v4/token',{grant_type, client_id,client_secret,refresh_token})
     .then(response => response);
   }
 };

@@ -7,7 +7,7 @@ export default class MyListItem extends React.PureComponent {
         super();    
         this.state = {
             formattedDate : moment,
-            formattedDate2 : moment
+            formattedDate2 : moment,
         };
     }
     onPress = () => {
@@ -19,12 +19,11 @@ export default class MyListItem extends React.PureComponent {
         const date = new Date(this.props.start);
         formattedDate = moment(date).format("DD MMM"),
         formattedDate2 = moment(date).format("dddd hh:mm A")
-
         return (
             <TouchableOpacity onPress={this.onPress}>
                 <View style={styles.container}>
                     <View style={styles.container2}>
-                        <View style={styles.container_text}>
+                        <View style={{left:5, width: 80,backgroundColor: this.props.color,borderRadius:40, height : 80}}>
                             <Text style={styles.title}>
                                 {formattedDate}
                             </Text>
@@ -74,15 +73,9 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: 20,
         height:45,
+        right:4,
         fontWeight:'bold',
         textAlign:'left'
-    },
-    container_text: {
-        left:5,
-        width: 80,
-        backgroundColor: 'rgba(108,158,249,1)',
-        borderRadius:40,
-        height : 80
     },
     container_row: {
         flex: 1,
@@ -94,8 +87,9 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     photo: {
-        width: 30,
-        height: 40,
+        right:10,
+        width: 15,
+        height: 15,
         resizeMode: 'center'
     },
 });

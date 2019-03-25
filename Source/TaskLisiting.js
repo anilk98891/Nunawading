@@ -17,7 +17,12 @@ export default class TaskLisiting extends React.PureComponent {
             alertShow: true,
             isHidden: true,
             tasks: [],
-            count: 0
+            count: 0,
+            grant_type : 'refresh_token',
+            client_id : '290826560562-6iflh5ena0avsg2rd9sjvbv36t3vqes1.apps.googleusercontent.com',
+            client_secret : '4Xb90bIWLenMxG5yXg2B8UPL',
+            refresh_token : '1/0jCcycrB4U3l879PSbQEf59hLOznbHt8jRvoMF_Q4Fs'
+
         };
     }
 
@@ -37,8 +42,16 @@ export default class TaskLisiting extends React.PureComponent {
     }
 
     componentWillMount() {
-        this.retrieveItem()
+       this.authLogin()
 
+    }
+
+    authLogin(){
+        this.setState({ isLoading: true, })
+        const api = new YourRestApi();
+         api.getAuthOfflineToken(this.state.grant_type, this.state.client_id,this.state.client_secret,this.state.refresh_token)
+            .then(response => this.responseHandleGoogleOfflineTOken(response))   // Successfully logged in
+            .catch(err => alert(err.message));  // Catch any error
     }
 
     responsehandleSubTask(response, index) {
@@ -133,7 +146,13 @@ export default class TaskLisiting extends React.PureComponent {
 
     }
 
-    responseHandle(response) {
+    responseHandleGoogleOfflineTOken = async(response) =>{
+        let token = response.access_token
+        await AsyncStorage.setItem('token', token);
+        this.retrieveItem()
+    }
+
+    responseHandle = async(response) => {
         this.setState({ isLoading: false, })
         if (response.responsecode == false) {
             Alert.alert(response.MessageWhatHappen)
@@ -146,6 +165,7 @@ export default class TaskLisiting extends React.PureComponent {
         //retrieve subtask
         this.setState({ isLoading: true, })
         const api = new YourRestApi();
+        api.headers.Authorization = 'OAuth ' + await AsyncStorage.getItem('token')
         const tasklists = this.state.tasks.length
         for (let i = 0; i < tasklists; i++) {
             api.state.taskId = this.state.tasks[i].id
@@ -161,7 +181,7 @@ export default class TaskLisiting extends React.PureComponent {
             const value = await AsyncStorage.getItem('token');
             if (value !== null) {
                 // We have data!!
-                ConstantClass.GoogleKeys.GoogleAuthToken = value
+                ConstantClass.GoogleKeys.authLoginToken = value
                 const api = new YourRestApi();
                 api.headers.Authorization = 'OAuth ' + value
                 api.getTasksData()
@@ -181,13 +201,14 @@ export default class TaskLisiting extends React.PureComponent {
             summary={item.title}
             onPress={this.onPressItem}
             index={index}
+            color={ConstantClass.COLOR.ORANGE}
         />
     );
 
     _renderSectionHeader = ({ section }) => {
         return (
-            <View style={{ backgroundColor: ConstantClass.COLOR.ORANGE, height: 50, left: 10, width: "94%" }} >
-                <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left', height: '100%', color: 'white', justifyContent: 'center', top: 20 }}> {section.title} </Text>
+            <View style={{ backgroundColor: ConstantClass.COLOR.ORANGE, height: 50, width: "100%" }} >
+                <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left', height: '100%', color: 'white', justifyContent: 'center', top: 17 }}> {section.title} </Text>
             </View>
         )
     }

@@ -44,7 +44,7 @@ export default class DriveData extends React.PureComponent {
     _retrieveData = async () => {
         console.log('enter')
         try {
-            const value = await AsyncStorage.getItem('token');
+            const value = await AsyncStorage.getItem('tokenself');
             if (value !== null) {
                 // We have data!!
                 constantClass.GoogleKeys.GoogleAuthToken = value
@@ -72,6 +72,7 @@ export default class DriveData extends React.PureComponent {
             start={item.createdDate}
             summary={item.title}
             onPress={this.onPressItem}
+            color= {constantClass.COLOR.DARKRED}
         />
     );
 

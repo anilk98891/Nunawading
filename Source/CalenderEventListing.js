@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, FlatList, View, Text, TouchableHighlight, AsyncStorage, Image, SafeAreaView } from 'react-native';
+import { StyleSheet,makeUppercase, Platform, FlatList, View, Text, TouchableHighlight, AsyncStorage, Image, SafeAreaView } from 'react-native';
 import CustomRow from '../CustomView/MyListItem'
 import YourRestApi from '../ApiClass/RestClass'
 import ConstantClass from '../Constants/ConstantClass'
 import moment from 'moment';
 import RNCalendarEvents from 'react-native-calendar-events'
-import RNLocalNotifications from 'react-native-local-notifications';
+// import RNLocalNotifications from 'react-native-local-notifications';
 
 export default class CalenderEventListing extends React.PureComponent {
     constructor() {
@@ -102,7 +102,7 @@ export default class CalenderEventListing extends React.PureComponent {
 
                 promise1.then(function (value) {
                         createEvents(value)
-                        createLocalNotification(value)
+                        // createLocalNotification(value)
                     })
             }
 
@@ -124,7 +124,12 @@ export default class CalenderEventListing extends React.PureComponent {
         }
 
         function createEvents(i){
-            let currentDate = moment(i.start.dateTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            let currentDate = ''
+            if (Platform.OS !== 'android') {
+                currentDate =  moment(i.start.dateTime).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + "UTC"
+            } else {
+                currentDate = moment(i.start.dateTime).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + 'Z'
+            }
             console.log(currentDate + i.summary)
             RNCalendarEvents.saveEvent(i.summary, {
                 location: 'self',

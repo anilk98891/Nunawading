@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, SectionList, View, Text, TouchableHighlight, AsyncStorage, Image, SafeAreaView } from 'react-native';
+import { StyleSheet,Platform, SectionList, View, Text, TouchableHighlight, AsyncStorage, Image, SafeAreaView } from 'react-native';
 import CustomRow from '../CustomView/MyListItem'
 import YourRestApi from '../ApiClass/RestClass'
 import ConstantClass from '../Constants/ConstantClass';
 import moment from 'moment';
 import RNCalendarEvents from 'react-native-calendar-events'
-import RNLocalNotifications from 'react-native-local-notifications';
+// import RNLocalNotifications from 'react-native-local-notifications';
 
 export default class TaskLisiting extends React.PureComponent {
     constructor() {
@@ -99,17 +99,22 @@ export default class TaskLisiting extends React.PureComponent {
             var promise1 = new Promise(function (resolve, reject) {
                 setTimeout(function () {
                     resolve(i);
-                }, 500 * j);
+                }, 100 * j);
             });
 
             promise1.then(function (value) {
                 createEvents(value)
-                createLocalNotification(value)
+                // createLocalNotification(value)
             })
         }
 
         function createEvents(i) {
-            let currentDate = moment(i.due == undefined ? i.updated : i.due).format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            let currentDate = ''
+            if (Platform.OS !== 'android') {
+                currentDate =  moment(i.due == undefined ? i.updated : i.due).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + "UTC"
+            } else {
+                currentDate = moment(i.due == undefined ? i.updated : i.due).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + 'Z'
+            }
             RNCalendarEvents.saveEvent(i.title, {
                 location: 'self',
                 notes: 'church task',
@@ -153,6 +158,7 @@ export default class TaskLisiting extends React.PureComponent {
     }
 
     responseHandle = async(response) => {
+        console.log(response)
         this.setState({ isLoading: false, })
         if (response.responsecode == false) {
             Alert.alert(response.MessageWhatHappen)

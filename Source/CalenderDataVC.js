@@ -89,14 +89,14 @@ export default class CalenderData extends React.Component {
             <SafeAreaView>
                 <View style={styles.container}>
                     <TouchableOpacity onPress={() => this._onSIGNINPressed()}>
-                        <Image source={require('../Resources/calendar.png')} />
+                        <Image style={styles.containerHalf} source={require('../Resources/calendar.png')} />
                     </TouchableOpacity>
                     <View style={{ height: 30 }} />
                     <TouchableOpacity onPress={() => this._onTaskPressed()}>
-                        <Image source={require('../Resources/task.png')} />
+                        <Image style={styles.containerHalf} source={require('../Resources/task.png')} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this._onDrivePressed()}>
-                        <Image source={require('../Resources/task.png')} />
+                        <Image  style={styles.containerHalf} source={require('../Resources/task.png')} />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -110,16 +110,19 @@ var styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         height: '100%'
-    }, centerButton: {
-        height: 100,
-        width: 100,
-        resizeMode: 'stretch',
-    }, rightBarImage: {
-        bottom: -3,
-        height: 30,
-        width: 30,
-    }, rightBarBtn: {
-        height: 35,
-        width: 40,
-    },
+    }, 
+    containerHalf: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 100,
+      height: 100
+  },rightBarImage: {
+    bottom: -3,
+    height: 30,
+    width: 30,
+}, rightBarBtn: {
+    height: 35,
+    width: 40,
+},
 })

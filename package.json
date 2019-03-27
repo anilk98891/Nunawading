@@ -17,7 +17,6 @@
     "react-native-exit-app": "^1.0.0",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-google-signin": "^1.2.1",
-    "react-native-local-notifications": "^2.0.0",
     "react-native-rest-client": "^0.1.1",
     "react-navigation": "^3.3.0"
   },

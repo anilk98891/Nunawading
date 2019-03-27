@@ -9,7 +9,7 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.corbt.keepawake.KCKeepAwakePackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.calendarevents.CalendarEventsPackage;
-import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
+//import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
 import com.vonovak.AddCalendarEventPackage;
 import com.github.wumke.RNExitApp.RNExitAppPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
@@ -40,7 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
             new KCKeepAwakePackage(),
             new ReactVideoPackage(),
             new CalendarEventsPackage(),
-            new RNLocalNotificationsPackage(),
+//            new RNLocalNotificationsPackage(),
             new AddCalendarEventPackage(),
             new RNExitAppPackage(),
             new RNGoogleSigninPackage(),

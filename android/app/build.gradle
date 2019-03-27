@@ -140,7 +140,7 @@ dependencies {
     implementation project(':react-native-keep-awake')
     implementation project(':react-native-video')
     implementation project(':react-native-calendar-events')
-    implementation project(':react-native-local-notifications')
+//    implementation project(':react-native-local-notifications')
     implementation project(':react-native-add-calendar-event')
     implementation project(':react-native-exit-app')
     implementation project(':react-native-google-signin')

@@ -97,7 +97,7 @@ export default class CalenderEventListing extends React.PureComponent {
                 var promise1 = new Promise(function (resolve, reject) {
                     setTimeout(function () {
                         resolve(i);
-                    }, 500 * j);
+                    }, 100 * j);
                 });
 
                 promise1.then(function (value) {

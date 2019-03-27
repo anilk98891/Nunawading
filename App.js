@@ -14,7 +14,7 @@ import CalenderEventScreen from './Source/CalenderEventListing'
 import TaskEventScreen from './Source/TaskLisiting'
 import DriveDataScreen from './Source/DriveData'
 import WebViewDataScreen from './Source/WebView'
-
+import videoPlayerScreen from './Source/VideoPlayer'
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 const instructions = Platform.select({
@@ -52,6 +52,13 @@ const AppStack = createStackNavigator({
     navigationOptions: {
       title: 'WebView',
       headerTitle: 'WebView List',
+    }
+  },
+  videoPlayer: {
+    screen: videoPlayerScreen,
+    navigationOptions: {
+      title: 'videoPlayer',
+      headerTitle: 'video List',
     }
   }
 });

@@ -3,6 +3,11 @@ package com.googlecalenderdemo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.github.yamill.orientation.OrientationPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.corbt.keepawake.KCKeepAwakePackage;
+import com.brentvatne.react.ReactVideoPackage;
 import com.calendarevents.CalendarEventsPackage;
 import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
 import com.vonovak.AddCalendarEventPackage;
@@ -29,6 +34,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LinearGradientPackage(),
+            new OrientationPackage(),
+            new VectorIconsPackage(),
+            new KCKeepAwakePackage(),
+            new ReactVideoPackage(),
             new CalendarEventsPackage(),
             new RNLocalNotificationsPackage(),
             new AddCalendarEventPackage(),

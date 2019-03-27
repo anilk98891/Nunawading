@@ -18,11 +18,16 @@ export default class DriveData extends React.PureComponent {
         this.setState({isHidden: true})
     }
 
-    onPressItem = (id) => {
-        console.log(id)
+    onPressItem = (id, index) => {
+        if (this.state.events[index].mimeType.includes('video')) {
+            this.props.navigation.navigate('videoPlayer', {
+                itemId: id,
+            });
+        } else {
             this.props.navigation.navigate('WebView', {
                 itemId: id,
-              });
+            });
+        }
     }
 
     componentWillMount() {
@@ -66,13 +71,14 @@ export default class DriveData extends React.PureComponent {
         
     };
 
-    renderItem = ({ item }) => (
+    renderItem = ({ item, index }) => (
         <CustomRow
             id={item.id}
             start={item.createdDate}
             summary={item.title}
             onPress={this.onPressItem}
             color= {constantClass.COLOR.DARKRED}
+            index={index}
         />
     );
 

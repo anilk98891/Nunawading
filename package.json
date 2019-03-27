@@ -11,6 +11,7 @@
     "react": "16.6.3",
     "react-native": "0.58.4",
     "react-native-add-calendar-event": "^2.3.0",
+    "react-native-af-video-player": "^0.2.1",
     "react-native-calendar-events": "^1.7.0",
     "react-native-events-calendar": "^1.0.8",
     "react-native-exit-app": "^1.0.0",

@@ -214,7 +214,7 @@ export default class TaskLisiting extends React.PureComponent {
     _renderSectionHeader = ({ section }) => {
         return (
             <View style={{ backgroundColor: ConstantClass.COLOR.ORANGE, height: 50, width: "100%" }} >
-                <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left', height: '100%', color: 'white', justifyContent: 'center', top: 17 }}> {section.title} </Text>
+                <Text style={{ left: 10, fontSize: 16, fontWeight: '600', textAlign: 'left', height: '100%', color: 'white', justifyContent: 'center', top: 17 }}> {section.title} </Text>
             </View>
         )
     }

@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height:45,
         right:4,
-        fontWeight:'bold',
+        fontWeight:'600',
         textAlign:'left'
     },
     container_row: {
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     photo: {
-        right:10,
-        width: 15,
+        right:2,
+        width: 18,
         height: 15,
         resizeMode: 'center'
     },

@@ -2,9 +2,16 @@ import React from 'react';
 import { StyleSheet, ImageBackground, View, AsyncStorage, Button, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import RNExitApp from 'react-native-exit-app';
+import * as firebase from "firebase";
 
 export default class CalenderData extends React.Component {
   
+  constructor() {
+    super();
+    this.state = {
+        isAdmin:false,
+    }}
+
     static navigationOptions = ({ navigation }) => {
         return {
             headerTitle: 'Calendar List',
@@ -16,6 +23,35 @@ export default class CalenderData extends React.Component {
         };
     };
     
+    async logout() {
+
+      try {
+  
+          await firebase.auth().signOut();
+  
+          // Navigate to login view
+  
+      } catch (error) {
+          console.log(error);
+      }
+  
+  }
+
+  async getUserData() {
+    let user = await firebase.auth().currentUser;
+    if (user != null){
+    console.log('id: ' + firebase.auth().currentUser.uid)
+    let userMobilePath = "/Users/" + user.uid;
+    firebase.database().ref(userMobilePath).on('value', (snapshot) => {
+
+      if (snapshot.val().isAdmin) {
+        this.setState({ isAdmin: true })
+      } else {
+        this.setState({ isAdmin: false })
+      }
+    });
+  } 
+  }
 
   _onSIGNINPressed() {
     this.props.navigation.navigate('CalenderEvent')
@@ -44,6 +80,10 @@ export default class CalenderData extends React.Component {
             }
     }
 
+    _onUserRole = async() => {
+      this.props.navigation.navigate('UserRole')
+    }
+
     _onDrivePressed = async() => {
         try {
             await GoogleSignin.hasPlayServices();
@@ -69,7 +109,6 @@ export default class CalenderData extends React.Component {
     }
 
     componentWillMount() {
-        console.log('run')
         GoogleSignin.configure({
           scopes:["https://www.googleapis.com/auth/calendar.events.readonly","https://www.googleapis.com/auth/plus.login","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive.readonly","https://www.googleapis.com/auth/drive.metadata.readonly","https://www.googleapis.com/auth/tasks.readonly"],
           webClientId: '290826560562-3sqo093d52llo4jhkqcfokj6nc7g77o6.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -81,25 +120,35 @@ export default class CalenderData extends React.Component {
             // androidClientId: '290826560562-3sqo093d52llo4jhkqcfokj6nc7g77o6.apps.googleusercontent.com',
             iosClientId: '290826560562-tdgvdtt0i1bfhp71egdvm7umalfb6mbo.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
           });
+          this.getUserData()
     }
 
     render() {
-
         return (
-            <SafeAreaView>
-                <View style={styles.container}>
-                    <TouchableOpacity onPress={() => this._onSIGNINPressed()}>
-                        <Image style={styles.containerHalf} source={require('../Resources/calendar.png')} />
-                    </TouchableOpacity>
-                    <View style={{ height: 30 }} />
-                    <TouchableOpacity onPress={() => this._onTaskPressed()}>
-                        <Image style={styles.containerHalf} source={require('../Resources/task.png')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this._onDrivePressed()}>
-                        <Image  style={styles.containerHalf} source={require('../Resources/task.png')} />
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
+          <SafeAreaView>
+            <View style={styles.container}>
+            <View style={styles.containerRow}>
+              <TouchableOpacity onPress={() => this._onSIGNINPressed()}>
+                <Image style={styles.containerHalf} source={require('../Resources/calendar.png')} />
+              </TouchableOpacity>
+              <View style={{ height: 30 }} />
+              <TouchableOpacity onPress={() => this._onTaskPressed()}>
+                <Image style={styles.containerHalf} source={require('../Resources/task.png')} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.containerRow}>
+              <TouchableOpacity onPress={() => this._onDrivePressed()}>
+                <Image style={styles.containerHalf} source={require('../Resources/task.png')} />
+              </TouchableOpacity>
+              {
+                this.state.isAdmin == true ?
+              <TouchableOpacity onPress={() => this._onUserRole()}>
+                <Image style={styles.containerHalf} source={require('../Resources/task.png')} />
+              </TouchableOpacity> : null
+              }
+            </View>
+            </View>
+          </SafeAreaView>
         );
     }
 }
@@ -110,14 +159,24 @@ var styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         height: '100%'
-    }, 
+    },
+    containerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 100,
+      height: 100,
+      margin:20
+  }, 
     containerHalf: {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       width: 100,
-      height: 100
-  },rightBarImage: {
+      height: 100,
+      margin:20
+  },
+  rightBarImage: {
     bottom: -3,
     height: 30,
     width: 30,

@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "firebase": "^4.9.1",
     "moment": "^2.24.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
@@ -15,6 +16,7 @@
     "react-native-calendar-events": "^1.7.0",
     "react-native-events-calendar": "^1.0.8",
     "react-native-exit-app": "^1.0.0",
+    "react-native-firebase": "^5.2.3",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-google-signin": "^1.2.1",
     "react-native-rest-client": "^0.1.1",

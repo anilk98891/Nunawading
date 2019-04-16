@@ -15,6 +15,10 @@ import TaskEventScreen from './Source/TaskLisiting'
 import DriveDataScreen from './Source/DriveData'
 import WebViewDataScreen from './Source/WebView'
 import videoPlayerScreen from './Source/VideoPlayer'
+import SignInScreen from './Source/SignInVc'
+import SignUpScreen from './Source/SignupVC'
+import UserRoleScreen from './Source/UserRole'
+
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 const instructions = Platform.select({
@@ -25,9 +29,24 @@ const instructions = Platform.select({
 });
 
 const AppStack = createStackNavigator({
+  SignIn: {
+    screen: SignInScreen,
+    navigationOptions: {
+      title: 'videoPlayer',
+      headerTitle: 'video List',
+    }
+  },
+  SignUp: {
+    screen: SignUpScreen,
+    navigationOptions: {
+      title: 'videoPlayer',
+      headerTitle: 'video List',
+    }
+  },
   Calender: {
     screen: CalenderDataScreen,
-  }, CalenderEvent: {
+  }, 
+  CalenderEvent: {
     screen: CalenderEventScreen,
     navigationOptions: {
       title: `Calender`,
@@ -45,6 +64,13 @@ const AppStack = createStackNavigator({
     navigationOptions: {
       title: 'Drive data',
       headerTitle: 'Drive List',
+    }
+  },
+  UserRole: {
+    screen:   UserRoleScreen,
+    navigationOptions: {
+      title: ' Users list',
+      headerTitle: 'User List',
     }
   },
   WebView: {

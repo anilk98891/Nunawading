@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,Platform, SectionList, View, Text, TouchableHighlight, AsyncStorage, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Platform, SectionList, View, Text, TouchableHighlight, AsyncStorage, Image, SafeAreaView } from 'react-native';
 import CustomRow from '../CustomView/MyListItem'
 import YourRestApi from '../ApiClass/RestClass'
 import ConstantClass from '../Constants/ConstantClass';
@@ -18,10 +18,10 @@ export default class TaskLisiting extends React.PureComponent {
             isHidden: true,
             tasks: [],
             count: 0,
-            grant_type : 'refresh_token',
-            client_id : '290826560562-6iflh5ena0avsg2rd9sjvbv36t3vqes1.apps.googleusercontent.com',
-            client_secret : '4Xb90bIWLenMxG5yXg2B8UPL',
-            refresh_token : '1/0jCcycrB4U3l879PSbQEf59hLOznbHt8jRvoMF_Q4Fs'
+            grant_type: 'refresh_token',
+            client_id: '290826560562-6iflh5ena0avsg2rd9sjvbv36t3vqes1.apps.googleusercontent.com',
+            client_secret: '4Xb90bIWLenMxG5yXg2B8UPL',
+            refresh_token: '1/0jCcycrB4U3l879PSbQEf59hLOznbHt8jRvoMF_Q4Fs'
 
         };
     }
@@ -42,14 +42,14 @@ export default class TaskLisiting extends React.PureComponent {
     }
 
     componentWillMount() {
-       this.authLogin()
+        this.authLogin()
 
     }
 
-    authLogin(){
+    authLogin() {
         this.setState({ isLoading: true, })
         const api = new YourRestApi();
-         api.getAuthOfflineToken(this.state.grant_type, this.state.client_id,this.state.client_secret,this.state.refresh_token)
+        api.getAuthOfflineToken(this.state.grant_type, this.state.client_id, this.state.client_secret, this.state.refresh_token)
             .then(response => this.responseHandleGoogleOfflineTOken(response))   // Successfully logged in
             .catch(err => alert(err.message));  // Catch any error
     }
@@ -111,7 +111,7 @@ export default class TaskLisiting extends React.PureComponent {
         function createEvents(i) {
             let currentDate = ''
             if (Platform.OS !== 'android') {
-                currentDate =  moment(i.due == undefined ? i.updated : i.due).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + "UTC"
+                currentDate = moment(i.due == undefined ? i.updated : i.due).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + "UTC"
             } else {
                 currentDate = moment(i.due == undefined ? i.updated : i.due).utc().format("YYYY-MM-DTHH:mm:ss.SSS") + 'Z'
             }
@@ -138,26 +138,26 @@ export default class TaskLisiting extends React.PureComponent {
 
             //RNLocalNotifications.setAndroidIcons(largeIconName, largeIconType, smallIconName, smallIconType);
             RNLocalNotifications.setAndroidIcons("1.png", "mipmap", "notification_small", "drawable"); //this are the default values, this function is optional
-    
+
             //RNLocalNotifications.createNotification(id, text, datetime, sound[, hiddendata]);
             RNLocalNotifications.createNotification(1, value.summary, currentDate, 'default');
-    
+
             //RNLocalNotifications.updateNotification(id, text, datetime, sound[, hiddendata]);
             // RNLocalNotifications.updateNotification(1, 'Some modifications to text', '2017-01-02 12:35', 'silence');
-    
+
             //RNLocalNotifications.deleteNotification(id);
             // RNLocalNotifications.deleteNotification(1);
         }
 
     }
 
-    responseHandleGoogleOfflineTOken = async(response) =>{
+    responseHandleGoogleOfflineTOken = async (response) => {
         let token = response.access_token
         await AsyncStorage.setItem('token', token);
         this.retrieveItem()
     }
 
-    responseHandle = async(response) => {
+    responseHandle = async (response) => {
         console.log(response)
         this.setState({ isLoading: false, })
         if (response.responsecode == false) {
